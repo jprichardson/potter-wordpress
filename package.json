@@ -1,0 +1,30 @@
+{
+  "name": "pottercms-wordpress-import",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": [
+    ""
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [],
+  "author": "JP Richardson <jprichardson@gmail.com>",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": ""
+    }
+  ],
+  "dependencies": {
+    "commander": "~1.0.5",
+    "colors": "~0.6.0-1",
+    "string": "~1.1.0"
+  },
+  "devDependencies": {},
+  "main": "./lib/pottercms-wordpress-import.js",
+  "scripts": {
+    "test": "mocha test"
+  }
+}
