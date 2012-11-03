@@ -1,16 +1,20 @@
+#!/usr/bin/env node
+
 var program = require('commander')
   , wp2md = require('wp2md')
   , colors = require('colors')
   , S = require('string')
+  , fs = require('fs-extra')
+  , path = require('path')
 
 program
   .version(require('../package.json').version)
   .option('-h, --host [host]', 'REQUIRED. The host or url of the Wordpress blog.')
   .option('-u, --user [user]', 'REQUIRED. The user name to login the Wordpress blog.')
   .option('-p, --password [password]', 'REQUIRED. The password to login to the Wordpress blog.')
-  .option('-l, --limit [limit]', 'The number of simultaneous requests to make. Default is 4.', 4)
+  .option('-l, --limit [limit]', 'The number of simultaneous requests to make. Default is 4.', 1)
   .option('-d, --dir [dir]', 'The directory to dump the files. Default is the current directory.', process.cwd())
-  /*.options('-n, --numberOfArticles [numberOfArticles]', 'The number of articles to get. Default is 1000.', 1000)*/
+  .option('--exclude-drafts', 'Exclude exporting of drafts.')
   .parse(process.argv);
 
 if (!program.host || !program.user || !program.password) {
@@ -29,11 +33,30 @@ wp2md(program)
   console.error(err);
 })
 .article(function(article, next) {
-  //console.log(article.content)
+  if (program.excludeDrafts && article.status === 'draft') 
+    return next();
+
   var text = colors.cyan(S('Got').padLeft(10)) + ' : ' + colors.green('[' + S(article.date.toDateString()).padRight(12) + '] ') + article.title
+    , month = ('0' + (article.date.getMonth()+1)).slice(-2)
+    , year = article.date.getFullYear()
+    , articleFile = path.join(program.dir, 'articles', year, month, article.slug + '.md')
+    , commentsFile = path.join(path.dirname(articleFile), article.slug + '.comments.json')
+
   console.log(text)
-  fs.writeFile(article.slug + '.md', makeFileText(article), function(err) {
-    next();
+
+  fs.touch(articleFile, function(err) {
+    if (err) console.error(err);
+    fs.writeFile(articleFile, makeFileText(article), 'utf8', function(err) {
+      if (err) console.error(err);
+
+      if (article.comments.length > 0)
+        fs.writeJSONFile(commentsFile, article.comments, function(err) {
+          if (err) console.error(err);
+          next();
+        })
+      else
+        next();
+    })
   })
 }).end(function() {
   console.log('\n  Done.\n');
@@ -45,6 +68,9 @@ function makeFileText(article) {
  
   header.push('author: ' + article.author)
   header.push('publish: ' + article.date)
+  header.push('status: ' + article.status)
+  header.push('type: ' + article.type)
+  header.push('link: ' + article.link)
   header.push('tags: ' + article.categories.join(', '))
   header.push('-->')
   header.push('\n')

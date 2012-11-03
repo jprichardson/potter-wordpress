@@ -1,5 +1,5 @@
 {
-  "name": "pottercms-wordpress-import",
+  "name": "pottercms-wordpress",
   "version": "0.0.1",
   "description": "",
   "homepage": [
@@ -20,11 +20,15 @@
   "dependencies": {
     "commander": "~1.0.5",
     "colors": "~0.6.0-1",
-    "string": "~1.1.0"
+    "string": "~1.1.0",
+    "fs-extra": "0.2.x"
   },
   "devDependencies": {},
-  "main": "./lib/pottercms-wordpress-import.js",
   "scripts": {
     "test": "mocha test"
-  }
+  },
+  "bin": {
+    "potter-wordpress": "./bin/potter-wordpress"
+  },
+  "preferGloba": true
 }
