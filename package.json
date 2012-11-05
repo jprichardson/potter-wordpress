@@ -1,13 +1,13 @@
 {
   "name": "pottercms-wordpress",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "You can use this tool to export your WordPress blog to static Markdown files.",
   "homepage": [
     ""
   ],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git://github.com/jprichardson/potter-wordpress.git"
   },
   "keywords": ["wordpress", "markdown"],
   "author": "JP Richardson <jprichardson@gmail.com>",
@@ -21,7 +21,7 @@
     "commander": "~1.0.5",
     "colors": "~0.6.0-1",
     "string": "~1.1.0",
-    "fs-extra": "0.2.x",
+    "fs-extra": "0.3.x",
     "wp2md": "0.0.x"
   },
   "devDependencies": {},
@@ -31,5 +31,5 @@
   "bin": {
     "potter-wordpress": "./bin/potter-wordpress"
   },
-  "preferGloba": true
+  "preferGlobal": true
 }
