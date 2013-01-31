@@ -14,7 +14,7 @@ I don't want to use WordPress anymore. You can use this tool to export your Word
 Installation
 ------------
 
-    npm install pottercms-wordpress
+    npm install -g pottercms-wordpress
 
 
 
